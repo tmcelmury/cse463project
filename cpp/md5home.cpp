@@ -110,7 +110,7 @@ uint32_t[] pad(uint8_t[] message)
         }
         return uint32_t[](message);
     }
-    else if (remainder == 0)
+    else if (remainder == 0)    // Exactly a multiple of 512 bits
     {
         message[lastIndex] = 0x80;  // Append 0b1000_0000
         lastIndex++;
