@@ -3,31 +3,31 @@
 
 #define WORD_SIZE 32
 
-const uint8_t[4] negI = [0, 3, 2, 1];
-const uint8_t[4] one = [1, 0, 3, 2];
-const uint8_t[4] two = [2, 1, 0, 3];
-const uint8_t[4] three = [3, 2, 1, 0];
-uint32_t[64] T;
+const uint8_t negI[4] = [0, 3, 2, 1];
+const uint8_t one[4] = [1, 0, 3, 2];
+const uint8_t two[4] = [2, 1, 0, 3];
+const uint8_t three[4] = [3, 2, 1, 0];
+uint32_t T[64];
 
-uint32_t[] pad(uint8_t[]);
-uint32_t[4] pass1(uint32_t[16], uint32_t[4]);
-uint32_t[4] pass2(uint32_t[16], uint32_t[4]);
-uint32_t[4] pass3(uint32_t[16], uint32_t[4]);
-uint32_t[4] pass4(uint32_t[16], uint32_t[4]);
+uint32_t* pad(uint8_t[]);
+uint32_t* pass1(uint32_t*, uint32_t*);
+uint32_t* pass2(uint32_t*, uint32_t*);
+uint32_t* pass3(uint32_t*, uint32_t*);
+uint32_t* pass4(uint32_t*, uint32_t*);
 uint32_t F(uint32_t x, uint32_t y, uint32_t z);
 uint32_t G(uint32_t x, uint32_t y, uint32_t z);
 uint32_t H(uint32_t x, uint32_t y, uint32_t z);
 uint32_t I(uint32_t x, uint32_t y, uint32_t z);
 uint32_t leftRotate(uint32_t target, uint8_t n);
-uint32_t[64] generateT();
-const uint32_t[64] T = generateT();
+uint32_t* generateT();
+const uint32_t T[64] = generateT();
 
 
-uint32_t[4] MD5(uint8_t[] message)
+uint32_t* MD5(std::vector<char> message)
 {
-    uint32_t[4] D = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476];
+    uint32_t D[4] = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476];
     
-    uint32_t[] padded = pad(message);
+    uint32_t padded[] = pad(message);
 
     const unsigned long long numBlocks = padded.sizeof()/64;
 
@@ -39,9 +39,9 @@ uint32_t[4] MD5(uint8_t[] message)
     return D;
 }
 
-uint32_t[4] pass1(uint32_t[16] m, uint32_t[4] d)
+uint32_t* pass1(uint32_t* m, uint32_t* d)
 {
-    const uint8_t[4] shift = [7, 12, 17, 22];
+    const uint8_t shift[4] = [7, 12, 17, 22];
     for (int i = 0; i < 16; i++)
     {
         d[negI[i%4]] = d[one[i%4]] + leftRotate( (d[negI[i%4]] +
@@ -49,9 +49,9 @@ uint32_t[4] pass1(uint32_t[16] m, uint32_t[4] d)
     }
     return d;
 }
-uint32_t[4] pass2(uint32_t[16] m, uint32_t[4] d)
+uint32_t* pass2(uint32_t* m, uint32_t* d)
 {
-    const uint8_t[4] shift = [5, 9, 14, 20];
+    const uint8_t shift[4] = [5, 9, 14, 20];
     for (int j = 0; j < 16; j++)
     {
         d[negI[i%4]] = d[one[i%4]] + leftRotate( d[negI[i%4]] +
@@ -59,18 +59,18 @@ uint32_t[4] pass2(uint32_t[16] m, uint32_t[4] d)
     }
     return d;
 }
-uint32_t[4] pass3(uint32_t[16] m, uint32_t[4] d)
+uint32_t* pass3(uint32_t* m, uint32_t* d)
 {
-    const int8_t[4] shift = [4, 11, 16, 23];
+    const int8_t shift[4] = [4, 11, 16, 23];
     for (int k = 0; k < 16; k++)
     {
         d[negI[i%4]] = d[one[i%4]] + leftRotate( d[negI[i%4]] +
                     H(d[one[i%4]], d[two[i%4]], d[three[i%4]]) + m[(3*i + 5)%16] + T[i + 32], shift[i%4]);
     }
 }
-uint32_t[4] pass4(uint32_t[16] m, uint32_t[4] d)
+uint32_t* pass4(uint32_t* m, uint32_t* d)
 {
-    const uint8_t[4] shift = [6, 10, 15, 21];
+    const uint8_t shift[4] = [6, 10, 15, 21];
     for (int l = 0; l < 16; l++)
     {
         d[negI[i%4]] = d[one[i%4]] + leftRotate( d[negI[i%4]] +
@@ -78,11 +78,11 @@ uint32_t[4] pass4(uint32_t[16] m, uint32_t[4] d)
     }
 }
 
-uint32_t[] pad(uint8_t[] message)
+uint32_t* pad(std::vector<char> message)
 {
     unsigned long long remainder = (message.sizeof() * 8) % 512;    // // Find the remainder in bits after dividing total size by 512 bits
     unsigned long long lastIndex = message.sizeof();    // Find the index just beyond the last, used for appending
-    uint8_t[8] brokenSize = uint8_t[](lastIndex);   // Break the 64 bit size into a byte array, using typecasting
+    uint8_t brokenSize[8] = uint8_t[](lastIndex);   // Break the 64 bit size into a byte array, using typecasting
 
     if (remainder > 448) // There is not enough space for the 64 bit size
     {
@@ -160,7 +160,7 @@ uint32_t F(uint32_t x, uint32_t y, uint32_t z) { return (x & y) | (~x & z); }
 uint32_t G(uint32_t x, uint32_t y, uint32_t z) { return (x & z) | (y & ~z); }
 uint32_t H(uint32_t x, uint32_t y, uint32_t z) { return x ^ y ^ z; }
 uint32_t I(uint32_t x, uint32_t y, uint32_t z) { return y ^ (x | ~z); }
-uint32_t generateT()
+uint32_t* generateT()
 {
     uint32_t[64] T;
     for (int i = 0; i < 64; i++) { T[i] = uint32_t(floor(2^(WORD_SIZE) * abs(sin(i)))); }
