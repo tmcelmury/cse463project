@@ -83,7 +83,7 @@ class CryptoTest {
 
         // time the built-in hash method
         startTime = System.nanoTime();
-        String hashBuiltIn = toHexString(MD5.getMD5BuiltIn(message));
+        hashBuiltIn = toHexString(MD5.getMD5BuiltIn(message));
         endTime = System.nanoTime();
 
         // find time taken by built-in hash method
@@ -132,7 +132,7 @@ class CryptoTest {
 
         // time the built-in hash method
         startTime = System.nanoTime();
-        String hashBuiltIn = toHexString(MD5.getMD5BuiltIn(message));
+        hashBuiltIn = toHexString(MD5.getMD5BuiltIn(message));
         endTime = System.nanoTime();
 
         // find time taken by built-in hash method
@@ -181,7 +181,7 @@ class CryptoTest {
 
         // time the built-in hash method
         startTime = System.nanoTime();
-        String hashBuiltIn = toHexString(MD5.getMD5BuiltIn(message));
+        hashBuiltIn = toHexString(MD5.getMD5BuiltIn(message));
         endTime = System.nanoTime();
 
         // find time taken by built-in hash method
@@ -238,7 +238,7 @@ class CryptoTest {
 
         // time the built-in hash method
         startTime = System.nanoTime();
-        String hashBuiltIn = toHexString(SHA256.getSHABuiltIn(message));
+        hashBuiltIn = toHexString(SHA256.getSHABuiltIn(message));
         endTime = System.nanoTime();
 
         // find time taken by built-in hash method
@@ -288,7 +288,7 @@ class CryptoTest {
 
         // time the built-in hash method
         startTime = System.nanoTime();
-        String hashBuiltIn = toHexString(SHA256.getSHABuiltIn(message));
+        hashBuiltIn = toHexString(SHA256.getSHABuiltIn(message));
         endTime = System.nanoTime();
 
         // find time taken by built-in hash method
@@ -337,7 +337,7 @@ class CryptoTest {
 
         // time the built-in hash method
         startTime = System.nanoTime();
-        String hashBuiltIn = toHexString(SHA256.getSHABuiltIn(message));
+        hashBuiltIn = toHexString(SHA256.getSHABuiltIn(message));
         endTime = System.nanoTime();
 
         // find time taken by built-in hash method
@@ -386,7 +386,7 @@ class CryptoTest {
 
         // time the built-in hash method
         startTime = System.nanoTime();
-        String hashBuiltIn = toHexString(SHA256.getSHABuiltIn(message));
+        hashBuiltIn = toHexString(SHA256.getSHABuiltIn(message));
         endTime = System.nanoTime();
 
         // find time taken by built-in hash method

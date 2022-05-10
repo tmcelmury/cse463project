@@ -1,5 +1,5 @@
 #include "md5home.h"
-#include <String.h>
+#include <string.h>
 
 #define WORD_SIZE 32
 

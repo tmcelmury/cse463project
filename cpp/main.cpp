@@ -1,34 +1,39 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
-#include "md5home.cpp">
+#include <string>
+#include <chrono>
+#include "md5home.h"
+#include "sha256.h"
 using namespace std::chrono;
 
 int main() {
+	high_resolution_clock clk;
+
 	// MD5 TESTS
-	cout << "MD5 TESTS\n" << endl
+	std::cout << "MD5 TESTS\n" << std::endl
 
 	// TEST #1: SHORT FILE/MESSAGE
 
 	// get file to use as input
-	ifstream shortFile;
-	shortFile.open("../short.txt");
+	std::ifstream shortFile("../short.txt");
+	shortFile.open();
 	if(!shortFile) {
-		cout << "Unable to open file";
+		std::cout << "Unable to open file";
 		exit(1);
 	}
 
-	string message = "";
-	string line = "";
+	std::string message = "";
+	std::string line = "";
 	
-	while(getLine(shortFile, line)) {
+	while(getline(shortFile, line)) {
 		message << message + line;
 	}
 
 	shortFile.close();
 
 	// display message to be hashed
-	cout << "Message to be hashed: \n" + message << endl;
+	std::cout << "Message to be hashed: \n" + message << std::endl;
 
 	// initialize time variables
 	auto startTime;
@@ -36,22 +41,22 @@ int main() {
 	auto duration;
 
 	// time the built-in hash method
-	startTime = high_resolution_clock::now();
+	startTime = clk.now();
 	uint32_t hashBuiltIn = MD5(message);
-	stop = high_resolution_clock::now();
+	stop = clk.now();
 	duration = duration_cast<nanoseconds>(stop-start);
 	
 	// display results
-	cout << "Hash from built-in method: \n" + duration.count() + " ns" << endl;
+	std::cout << "Hash from built-in method: \n" + duration.count() + " ns" << std::endl;
 
 	// time our implemented hash method
-	startTime = high_resolution_clock::now();
-	uint32_t hashBuiltIn = MD5(message);
-	stop = high_resolution_clock::now();
+	startTime = clk.now();
+	hashBuiltIn = MD5(message);
+	stop = clk.now();
 	duration = duration_cast<nanoseconds>(stop-start);
 
 	// display results
-	cout << "Hash from our implementation: \n" + duration.count() + " ns" << endl;
+	std::cout << "Hash from our implementation: \n" + duration.count() + " ns" << std::endl;
 
 
 
@@ -59,42 +64,42 @@ int main() {
 	// TEST #2: MEDIUM FILE/MESSAGE
 
 	// get file to use as input
-	ifstream mediumFile;
+	std::std::ifstream mediumFile;
 	mediumFile.open("../medium.txt");
-	if(!mediumFile) {
-		cout << "Unable to open file";
+	if(!mediumFile.is_open()) {
+		std::cout << "Unable to open file";
 		exit(1);
 	}
 	
 	message = "";
 	line = "";
 
-	while(getLine(mediumFile, line)) {
+	while(getline(mediumFile, line)) {
 		message << message + line;
 	}
 
 	mediumFile.close();
 
 	// display message to be hashed
-	cout << "Message to be hashed: \n" + message << endl;
+	std::cout << "Message to be hashed: \n" + message << std::endl;
 
 	// time the built-in hash method
-	startTime = high_resolution_clock::now();
-	uint32_t hashBuiltIn = MD5(message);
-	stop = high_resolution_clock::now();
+	startTime = clk.now();
+	hashBuiltIn = MD5(message);
+	stop = clk.now();
 	duration = duration_cast<nanoseconds>(stop-start);
 	
 	// display results
-	cout << "Hash from built-in method: \n" + duration.count() + " ns" << endl;
+	std::cout << "Hash from built-in method: \n" + duration.count() + " ns" << std::endl;
 
 	// time our implemented hash method
-	startTime = high_resolution_clock::now();
-	uint32_t hashBuiltIn = MD5(message);
-	stop = high_resolution_clock::now();
+	startTime = clk.now();
+	hashBuiltIn = MD5(message);
+	stop = clk.now();
 	duration = duration_cast<nanoseconds>(stop-start);
 
 	// display results
-	cout << "Hash from our implementation: \n" + duration.count() + " ns" << endl;
+	std::cout << "Hash from our implementation: \n" + duration.count() + " ns" << std::endl;
 
 
 
@@ -102,42 +107,42 @@ int main() {
 	// TEST #3: LONG FILE/MESSAGE
 
 	// get file to use as input
-	ifstream longFile;
+	std::ifstream longFile;
 	longFile.open("../long.txt");
 	if(!longFile) {
-		cout << "Unable to open file";
+		std::cout << "Unable to open file";
 		exit(1);
 	}
 
 	message = "";
 	line = "";
 	
-	while(getLine(longFile, line)) {
+	while(getline(longFile, line)) {
 		message << message + line;
 	}
 
 	longFile.close();
 
 	// display message to be hashed
-	cout << "Message to be hashed: \n" + message << endl;
+	std::cout << "Message to be hashed: \n" + message << std::endl;
 
 	// time the built-in hash method
-	startTime = high_resolution_clock::now();
-	uint32_t hashBuiltIn = MD5(message);
-	stop = high_resolution_clock::now();
+	startTime = clk.now();
+	hashBuiltIn = MD5(message);
+	stop = clk.now();
 	duration = duration_cast<nanoseconds>(stop-start);
 	
 	// display results
-	cout << "Hash from built-in method: \n" + duration.count() + " ns" << endl;
+	std::cout << "Hash from built-in method: \n" + duration.count() + " ns" << std::endl;
 
 	// time our implemented hash method
-	startTime = high_resolution_clock::now();
-	uint32_t hashBuiltIn = MD5(message);
-	stop = high_resolution_clock::now();
+	startTime = clk.now();
+	hashBuiltIn = MD5(message);
+	stop = clk.now();
 	duration = duration_cast<nanoseconds>(stop-start);
 
 	// display results
-	cout << "Hash from our implementation: \n" + duration.count() + " ns" << endl;
+	std::cout << "Hash from our implementation: \n" + duration.count() + " ns" << std::endl;
 
 
 
@@ -145,42 +150,42 @@ int main() {
 	// TEST #4: MEGA FILE/MESSAGE
 
 	// get file to use as input
-	ifstream megaFile;
+	std::ifstream megaFile;
 	megaFile.open("../100M.txt");
 	if(!megaFile) {
-		cout << "Unable to open file";
+		std::cout << "Unable to open file";
 		exit(1);
 	}
 	
 	message = "";
 	line = "";
 
-	while(getLine(megaFile, line)) {
+	while(getline(megaFile, line)) {
 		message << message + line;
 	}
 
 	megaFile.close();
 
 	// display message to be hashed
-	cout << "Message to be hashed: \n" + message << endl;
+	std::cout << "Message to be hashed: \n" + message << std::endl;
 
 	// time the built-in hash method
-	startTime = high_resolution_clock::now();
-	uint32_t hashBuiltIn = MD5(message);
-	stop = high_resolution_clock::now();
+	startTime = clk.now();
+	hashBuiltIn = MD5(message);
+	stop = clk.now();
 	duration = duration_cast<nanoseconds>(stop-start);
 	
 	// display results
-	cout << "Hash from built-in method: \n" + duration.count() + " ns" << endl;
+	std::cout << "Hash from built-in method: \n" + duration.count() + " ns" << std::endl;
 
 	// time our implemented hash method
-	startTime = high_resolution_clock::now();
-	uint32_t hashBuiltIn = MD5(message);
-	stop = high_resolution_clock::now();
+	startTime = clk.now();
+	hashBuiltIn = MD5(message);
+	stop = clk.now();
 	duration = duration_cast<nanoseconds>(stop-start);
 
 	// display results
-	cout << "Hash from our implementation: \n" + duration.count() + " ns" << endl;
+	std::cout << "Hash from our implementation: \n" + duration.count() + " ns" << std::endl;
 
 
 
@@ -191,47 +196,47 @@ int main() {
 
 
 	// SHA-256 TESTS
-	cout << "SHA-256 TESTS:\n" << endl;
+	std::cout << "SHA-256 TESTS:\n" << std::endl;
 
 	// TEST #1: SHORT FILE/MESSAGE
 
 	// get file to use as input
-	ifstream shortFile;
+	std::ifstream shortFile;
 	shortFile.open("../short.txt");
 	if(!shortFile) {
-		cout << "Unable to open file";
+		std::cout << "Unable to open file";
 		exit(1);
 	}
 	
 	message = "";
 	line = "";
 
-	while(getLine(shortFile, line)) {
+	while(getline(shortFile, line)) {
 		message << message + line;
 	}
 
 	shortFile.close();
 
 	// display message to be hashed
-	cout << "Message to be hashed: \n" + message << endl;
+	std::cout << "Message to be hashed: \n" + message << std::endl;
 
 	// time the built-in hash method
-	startTime = high_resolution_clock::now();
-	uint32_t hashBuiltIn = SHA256(message);
-	stop = high_resolution_clock::now();
+	startTime = clk.now();
+	hashBuiltIn = SHA256(message);
+	stop = clk.now();
 	duration = duration_cast<nanoseconds>(stop-start);
 	
 	// display results
-	cout << "Hash from built-in method: \n" + duration.count() + " ns" << endl;
+	std::cout << "Hash from built-in method: \n" + duration.count() + " ns" << std::endl;
 
 	// time our implemented hash method
-	startTime = high_resolution_clock::now();
-	uint32_t hashBuiltIn = SHA256(message);
-	stop = high_resolution_clock::now();
+	startTime = clk.now();
+	hashBuiltIn = SHA256(message);
+	stop = clk.now();
 	duration = duration_cast<nanoseconds>(stop-start);
 
 	// display results
-	cout << "Hash from our implementation: \n" + duration.count() + " ns" << endl;
+	std::cout << "Hash from our implementation: \n" + duration.count() + " ns" << std::endl;
 
 
 
@@ -239,42 +244,42 @@ int main() {
 	// TEST #2: MEDIUM FILE/MESSAGE
 
 	// get file to use as input
-	ifstream mediumFile;
+	std::ifstream mediumFile;
 	mediumFile.open("../medium.txt");
 	if(!mediumFile) {
-		cout << "Unable to open file";
+		std::cout << "Unable to open file";
 		exit(1);
 	}
 	
 	message = "";
 	line = "";
 
-	while(getLine(mediumFile, line)) {
+	while(getline(mediumFile, line)) {
 		message << message + line;
 	}
 
 	mediumFile.close();
 
 	// display message to be hashed
-	cout << "Message to be hashed: \n" + message << endl;
+	std::cout << "Message to be hashed: \n" + message << std::endl;
 
 	// time the built-in hash method
-	startTime = high_resolution_clock::now();
-	uint32_t hashBuiltIn = SHA256(message);
-	stop = high_resolution_clock::now();
+	startTime = clk.now();
+	hashBuiltIn = SHA256(message);
+	stop = clk.now();
 	duration = duration_cast<nanoseconds>(stop-start);
 	
 	// display results
-	cout << "Hash from built-in method: \n" + duration.count() + " ns" << endl;
+	std::cout << "Hash from built-in method: \n" + duration.count() + " ns" << std::endl;
 
 	// time our implemented hash method
-	startTime = high_resolution_clock::now();
-	uint32_t hashBuiltIn = SHA256(message);
-	stop = high_resolution_clock::now();
+	startTime = clk.now();
+	hashBuiltIn = SHA256(message);
+	stop = clk.now();
 	duration = duration_cast<nanoseconds>(stop-start);
 
 	// display results
-	cout << "Hash from our implementation: \n" + duration.count() + " ns" << endl;
+	std::cout << "Hash from our implementation: \n" + duration.count() + " ns" << std::endl;
 
 
 
@@ -282,42 +287,42 @@ int main() {
 	// TEST #3: LONG FILE/MESSAGE
 
 	// get file to use as input
-	ifstream longFile;
+	std::ifstream longFile;
 	longFile.open("../long.txt");
 	if(!longFile) {
-		cout << "Unable to open file";
+		std::cout << "Unable to open file";
 		exit(1);
 	}
 	
 	message = "";
 	line = "";
 
-	while(getLine(longFile, line)) {
+	while(getline(longFile, line)) {
 		message << message + line;
 	}
 
 	longFile.close();
 
 	// display message to be hashed
-	cout << "Message to be hashed: \n" + message << endl;
+	std::cout << "Message to be hashed: \n" + message << std::endl;
 
 	// time the built-in hash method
-	startTime = high_resolution_clock::now();
-	uint32_t hashBuiltIn = SHA256(message);
-	stop = high_resolution_clock::now();
+	startTime = clk.now();
+	hashBuiltIn = SHA256(message);
+	stop = clk.now();
 	duration = duration_cast<nanoseconds>(stop-start);
 	
 	// display results
-	cout << "Hash from built-in method: \n" + duration.count() + " ns" << endl;
+	std::cout << "Hash from built-in method: \n" + duration.count() + " ns" << std::endl;
 
 	// time our implemented hash method
-	startTime = high_resolution_clock::now();
-	uint32_t hashBuiltIn = SHA256(message);
-	stop = high_resolution_clock::now();
+	startTime = clk.now();
+	hashBuiltIn = SHA256(message);
+	stop = clk.now();
 	duration = duration_cast<nanoseconds>(stop-start);
 
 	// display results
-	cout << "Hash from our implementation: \n" + duration.count() + " ns" << endl;
+	std::cout << "Hash from our implementation: \n" + duration.count() + " ns" << std::endl;
 
 
 
@@ -325,40 +330,40 @@ int main() {
 	// TEST #4: MEGA FILE/MESSAGE
 
 	// get file to use as input
-	ifstream megaFile;
+	std::ifstream megaFile;
 	megaFile.open("../long.txt");
 	if(!megaFile) {
-		cout << "Unable to open file";
+		std::cout << "Unable to open file";
 		exit(1);
 	}
 	
 	message = "";
 	line = "";
 
-	while(getLine(megaFile, line)) {
+	while(getline(megaFile, line)) {
 		message << message + line;
 	}
 
 	megaFile.close();
 
 	// display message to be hashed
-	cout << "Message to be hashed: \n" + message << endl;
+	std::cout << "Message to be hashed: \n" + message << std::endl;
 
 	// time the built-in hash method
-	startTime = high_resolution_clock::now();
-	uint32_t hashBuiltIn = SHA256(message);
-	stop = high_resolution_clock::now();
+	startTime = clk.now();
+	hashBuiltIn = SHA256(message);
+	stop = clk.now();
 	duration = duration_cast<nanoseconds>(stop-start);
 	
 	// display results
-	cout << "Hash from built-in method: \n" + duration.count() + " ns" << endl;
+	std::cout << "Hash from built-in method: \n" + duration.count() + " ns" << std::endl;
 
 	// time our implemented hash method
-	startTime = high_resolution_clock::now();
-	uint32_t hashBuiltIn = SHA256(message);
-	stop = high_resolution_clock::now();
+	startTime = clk.now();
+	hashBuiltIn = SHA256(message);
+	stop = clk.now();
 	duration = duration_cast<nanoseconds>(stop-start);
 
 	// display results
-	cout << "Hash from our implementation: \n" + duration.count() + " ns" << endl;
+	std::cout << "Hash from our implementation: \n" + duration.count() + " ns" << std::endl;
 }
