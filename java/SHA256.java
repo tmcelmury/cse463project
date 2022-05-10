@@ -2,7 +2,7 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
-class SHA_256 {
+class SHA256 {
     // method invoking built-in SHA-256 funcitonality
     // modified version of algorithm provided by bilal-hungund on GeeksforGeeks
     // https://www.geeksforgeeks.org/sha-256-hash-in-java/
