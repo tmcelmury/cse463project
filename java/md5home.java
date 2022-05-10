@@ -3,19 +3,40 @@
 #define WORD_SIZE 32
 
 class MD5 {
-    const byte[4] negI = [0, 3, 2, 1];
-    const byte[4] one = [1, 0, 3, 2];
-    const byte[4] two = [2, 1, 0, 3];
-    const byte[4] three = [3, 2, 1, 0];
+    byte[4] negI = [0, 3, 2, 1];
+    byte[4] one = [1, 0, 3, 2];
+    byte[4] two = [2, 1, 0, 3];
+    byte[4] three = [3, 2, 1, 0];
     int[64] T;
 
 
-    public int[4] MD5(byte[] message) {
+    // algorithm courtesy of bilal-hungund on GeeksforGeeks
+    // https://www.geeksforgeeks.org/md5-hash-in-java/
+    public static String getMD5BuiltIn(String message) {
+        // Static getInstance method is called with hashing MD5
+        MessageDigest md = MessageDigest.getInstance("MD5");
+
+        // digest() method is called to calculate message digest
+        //  of an input digest() return array of byte
+        byte[] messageDigest = md.digest(input.getBytes());
+
+        // Convert byte array into signum representation
+        BigInteger no = new BigInteger(1, messageDigest);
+
+        // Convert message digest into hex value
+        String hashtext = no.toString(16);
+        while (hashtext.length() < 32) {
+            hashtext = "0" + hashtext;
+        }
+        return hashtext;
+    }
+
+    public int[4] getMD5Implemented(byte[] message) {
         int[4] D = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476];
         
         int[] padded = pad(message);
 
-        const unsigned long long numBlocks = padded.sizeof()/64;
+        unsigned long long numBlocks = padded.sizeof()/64;
 
         for (int i = 0; i < numBlocks; i++) {
             D = pass4(padded + (64 * i), pass3(padded + (64 * i), pass2(padded + (64 * i),
@@ -101,7 +122,7 @@ class MD5 {
     }
 
     public int[4] pass1(int[16] m, int[4] d) {
-        const byte[4] shift = [7, 12, 17, 22];
+        byte[4] shift = [7, 12, 17, 22];
         for (int i = 0; i < 16; i++)
         {
             d[negI[i%4]] = d[one[i%4]] + leftRotate( (d[negI[i%4]] +
@@ -110,7 +131,7 @@ class MD5 {
         return d;
     }
     public int[4] pass2(int[16] m, int[4] d) {
-        const byte[4] shift = [5, 9, 14, 20];
+        byte[4] shift = [5, 9, 14, 20];
         for (int j = 0; j < 16; j++)
         {
             d[negI[i%4]] = d[one[i%4]] + leftRotate( d[negI[i%4]] +
@@ -119,7 +140,7 @@ class MD5 {
         return d;
     }
     public int[4] pass3(int[16] m, int[4] d) {
-        const int8_t[4] shift = [4, 11, 16, 23];
+        int8_t[4] shift = [4, 11, 16, 23];
         for (int k = 0; k < 16; k++)
         {
             d[negI[i%4]] = d[one[i%4]] + leftRotate( d[negI[i%4]] +
@@ -127,7 +148,7 @@ class MD5 {
         }
     }
     public int[4] pass4(int[16] m, int[4] d) {
-        const byte[4] shift = [6, 10, 15, 21];
+        byte[4] shift = [6, 10, 15, 21];
         for (int l = 0; l < 16; l++)
         {
             d[negI[i%4]] = d[one[i%4]] + leftRotate( d[negI[i%4]] +
