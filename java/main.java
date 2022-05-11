@@ -1,4 +1,13 @@
+package hash;
 import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.lang.*;
+import java.security.MessageDigest;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import hash.MD5;
+import hash.SHA256;
 
 class CryptoTest {
 
@@ -8,16 +17,16 @@ class CryptoTest {
 
 		// TEST #1: SHORT FILE/MESSAGE
 
-		// get file to use as inputs
+		// get File to use as inputs
 		String filePath = "../short.txt";
-		File shortFile = new file(filePath);
+		File shortFile = new File(filePath);
 
 		BufferedReader br = new BufferedReader(new FileReader(shortFile));
 		
 		String message = "";
 
-		while(brShort.readLine() != null) {
-			message = message + brShort.readLine;
+		while(br.readLine() != null) {
+			message = message + br.readLine();
 		}
 
 		br.close();
@@ -40,7 +49,7 @@ class CryptoTest {
         timeElapsed = endTime - startTime;
 
         // display results
-        System.out.println("Hash from built-in method:")
+        System.out.println("Hash from built-in method: ");
         System.out.println(hashBuiltIn);
         System.out.println("Time taken: " + timeElapsed + " ns");
 
@@ -50,10 +59,10 @@ class CryptoTest {
         endTime = System.nanoTime();
         
         // find time taken by our implemented hash method
-        timeElapsedImplemented = endTime - startTime;
+        timeElapsed = endTime - startTime;
 
         // display results     
-        System.out.println("Hash from our implementation:");
+        System.out.println("Hash from our implementation: ");
         System.out.println(hashImplemented);
         System.out.println("Time taken: " + timeElapsed + " ns");
 
@@ -63,22 +72,22 @@ class CryptoTest {
 
 		// TEST #2: MEDIUM FILE/MESSAGE
 
-        // update file to use as input
+        // update File to use as input
 		filePath = "../medium.txt";
-		File mediumFile = new file(filePath);
+		File mediumFile = new File(filePath);
 
-		BufferedReader br = new BufferedReader(new FileReader(mediumFile));
+		br = new BufferedReader(new FileReader(mediumFile));
 		
         message = "";
 
 		while(br.readLine() != null) {
-			message = message + br.readLine;
+			message = message + br.readLine();
 		}
 
 		br.close();
 
         // display message to be hashed
-        System.out.println("\nMessage to be hashed:");
+        System.out.println("\nMessage to be hashed: ");
         System.out.println(message);
 
         // time the built-in hash method
@@ -90,20 +99,20 @@ class CryptoTest {
         timeElapsed = endTime - startTime;
 
         // display results
-        System.out.println("Hash from built-in method:")
+        System.out.println("Hash from built-in method: ");
         System.out.println(hashBuiltIn);
         System.out.println("Time taken: " + timeElapsed + " ns");
 
         // time our implemented hash method
         startTime = System.nanoTime();
-        String hashImplemented = toHexString(MD5.getMD5Implemented(message));
+        hashImplemented = toHexString(MD5.getMD5Implemented(message));
         endTime = System.nanoTime();
         
         // find time taken by our implemented hash method
         timeElapsed = endTime - startTime;
 
         // display results     
-        System.out.println("Hash from our implementation:");
+        System.out.println("Hash from our implementation: ");
         System.out.println(hashImplemented);
         System.out.println("Time taken: " + timeElapsed + " ns");
 
@@ -112,22 +121,22 @@ class CryptoTest {
 
 		// TEST #3: LONG FILE/MESSAGE
 
-        // update file to use as input
+        // update File to use as input
 		filePath = "../long.txt";
-		File longFile = new file(filePath);
+		File longFile = new File(filePath);
 
-		BufferedReader br = new BufferedReader(new FileReader(longFile));
+		br = new BufferedReader(new FileReader(longFile));
 
         message = "";
 		
 		while(br.readLine() != null) {
-			message = message + br.readLine;
+			message = message + br.readLine();
 		}
 
 		br.close();
 
         // display message to be hashed
-        System.out.println("\nMessage to be hashed:");
+        System.out.println("\nMessage to be hashed: ");
         System.out.println(message);
 
         // time the built-in hash method
@@ -139,20 +148,20 @@ class CryptoTest {
         timeElapsed = endTime - startTime;
 
         // display results
-        System.out.println("Hash from built-in method:")
+        System.out.println("Hash from built-in method: ");
         System.out.println(hashBuiltIn);
         System.out.println("Time taken: " + timeElapsed + " ns");
 
         // time our implemented hash method
         startTime = System.nanoTime();
-        String hashImplemented = toHexString(MD5.getMD5Implemented(message));
+        hashImplemented = toHexString(MD5.getMD5Implemented(message));
         endTime = System.nanoTime();
         
         // find time taken by our implemented hash method
         timeElapsed = endTime - startTime;
 
         // display results     
-        System.out.println("Hash from our implementation:");
+        System.out.println("Hash from our implementation: ");
         System.out.println(hashImplemented);
         System.out.println("Time taken: " + timeElapsed + " ns");
 
@@ -161,22 +170,22 @@ class CryptoTest {
 
 		// TEST #4: MEGA FILE/MESSAGE
 
-        // update file to use as input
+        // update File to use as input
 		filePath = "../100M.txt";
-		File megaFile = new file(filepath);
+		File megaFile = new File(filePath);
 
-		BufferedReader br = new BufferedReader(new FileReader(megaFile));
+		br = new BufferedReader(new FileReader(megaFile));
 		
         message = "";
 
 		while(br.readLine() != null) {
-			message = message + br.readLine;
+			message = message + br.readLine();
 		}
 
 		br.close();
 
         // display message to be hashed
-        System.out.println("\nMessage to be hashed:");
+        System.out.println("\nMessage to be hashed: ");
         System.out.println(message);
 
         // time the built-in hash method
@@ -188,20 +197,20 @@ class CryptoTest {
         timeElapsed = endTime - startTime;
 
         // display results
-        System.out.println("Hash from built-in method:")
+        System.out.println("Hash from built-in method: ");
         System.out.println(hashBuiltIn);
         System.out.println("Time taken: " + timeElapsed + " ns");
 
         // time our implemented hash method
         startTime = System.nanoTime();
-        String hashImplemented = toHexString(MD5.getMD5Implemented(message));
+        hashImplemented = toHexString(MD5.getMD5Implemented(message));
         endTime = System.nanoTime();
         
         // find time taken by our implemented hash method
         timeElapsed = endTime - startTime;
 
         // display results     
-        System.out.println("Hash from our implementation:");
+        System.out.println("Hash from our implementation: ");
         System.out.println(hashImplemented);
         System.out.println("Time taken: " + timeElapsed + " ns");
 
@@ -218,22 +227,22 @@ class CryptoTest {
 
 		// TEST #1: SHORT FILE/MESSAGE
 
-		// get file to use as input
-		String filePath = "../short.txt";
-		File shortFile = new file(filePath);
+		// get File to use as input
+		filePath = "../short.txt";
+		shortFile = new File(filePath);
 
-		BufferedReader br = new BufferedReader(new FileReader(shortFile));
+		br = new BufferedReader(new FileReader(shortFile));
 		
 		message = "";
 
-		while(brShort.readLine() != null) {
-			message = message + brShort.readLine;
+		while(br.readLine() != null) {
+			message = message + br.readLine();
 		}
 
 		br.close();
 
         // display message to be hashed
-        System.out.println("\nMessage to be hashed:");
+        System.out.println("\nMessage to be hashed: ");
         System.out.println(message);
 
         // time the built-in hash method
@@ -245,20 +254,20 @@ class CryptoTest {
         timeElapsed = endTime - startTime;
 
         // display results
-        System.out.println("Hash from built-in method:")
+        System.out.println("Hash from built-in method: ");
         System.out.println(hashBuiltIn);
         System.out.println("Time taken: " + timeElapsed + " ns");
 
         // time our implemented hash method
         startTime = System.nanoTime();
-        String hashImplemented = toHexString(SHA256.getSHA256(message));
+        hashImplemented = toHexString(SHA256.getSHA256(message));
         endTime = System.nanoTime();
         
         // find time taken by our implemented hash method
-        timeElapsedImplemented = endTime - startTime;
+        timeElapsed = endTime - startTime;
 
         // display results     
-        System.out.println("Hash from our implementation:");
+        System.out.println("Hash from our implementation: ");
         System.out.println(hashImplemented);
         System.out.println("Time taken: " + timeElapsed + " ns");
 
@@ -268,22 +277,22 @@ class CryptoTest {
 
 		// TEST #2: MEDIUM FILE/MESSAGE
 		
-        // update file to use as input
+        // update File to use as input
         filePath = "../medium.txt";
-		File mediumFile = new file(filePath);
+		mediumFile = new File(filePath);
 
-		BufferedReader br = new BufferedReader(new FileReader(mediumFile));
+		br = new BufferedReader(new FileReader(mediumFile));
 		
         message = "";
 
 		while(br.readLine() != null) {
-			message = message + br.readLine;
+			message = message + br.readLine();
 		}
 
 		br.close();
 
         // display message to be hashed
-        System.out.println("\nMessage to be hashed:");
+        System.out.println("\nMessage to be hashed: ");
         System.out.println(message);
 
         // time the built-in hash method
@@ -295,20 +304,20 @@ class CryptoTest {
         timeElapsed = endTime - startTime;
 
         // display results
-        System.out.println("Hash from built-in method:")
+        System.out.println("Hash from built-in method: ");
         System.out.println(hashBuiltIn);
         System.out.println("Time taken: " + timeElapsed + " ns");
 
         // time our implemented hash method
         startTime = System.nanoTime();
-        String hashImplemented = toHexString(SHA256.getSHA256(message));
+        hashImplemented = toHexString(SHA256.getSHA256(message));
         endTime = System.nanoTime();
         
         // find time taken by our implemented hash method
         timeElapsed = endTime - startTime;
 
         // display results     
-        System.out.println("Hash from our implementation:");
+        System.out.println("Hash from our implementation: ");
         System.out.println(hashImplemented);
         System.out.println("Time taken: " + timeElapsed + " ns");
 
@@ -317,22 +326,22 @@ class CryptoTest {
 
 		// TEST #3: LONG FILE/MESSAGE
 		
-        // update file to use as input
+        // update File to use as input
         filePath = "../long.txt";
-		File longFile = new file(filePath);
+		longFile = new File(filePath);
 
-		BufferedReader br = new BufferedReader(new FileReader(longFile));
+		br = new BufferedReader(new FileReader(longFile));
 		
         message = "";
 
 		while(br.readLine() != null) {
-			message = message + br.readLine;
+			message = message + br.readLine();
 		}
 
 		br.close();
 
         // display message to be hashed
-        System.out.println("\nMessage to be hashed:");
+        System.out.println("\nMessage to be hashed: ");
         System.out.println(message);
 
         // time the built-in hash method
@@ -344,20 +353,20 @@ class CryptoTest {
         timeElapsed = endTime - startTime;
 
         // display results
-        System.out.println("Hash from built-in method:")
+        System.out.println("Hash from built-in method: ");
         System.out.println(hashBuiltIn);
         System.out.println("Time taken: " + timeElapsed + " ns");
 
         // time our implemented hash method
         startTime = System.nanoTime();
-        String hashImplemented = toHexString(SHA256.getSHA256(message));
+        hashImplemented = toHexString(SHA256.getSHA256(message));
         endTime = System.nanoTime();
         
         // find time taken by our implemented hash method
         timeElapsed = endTime - startTime;
 
         // display results     
-        System.out.println("Hash from our implementation:");
+        System.out.println("Hash from our implementation: ");
         System.out.println(hashImplemented);
         System.out.println("Time taken: " + timeElapsed + " ns");
 
@@ -366,22 +375,22 @@ class CryptoTest {
 
 		// TEST #4: MEGA FILE/MESSAGE
 		
-        // update file to use as input
+        // update File to use as input
         filePath = "../100M.txt";
-		File megaFile = new file(filepath);
+		megaFile = new File(filePath);
 
-		BufferedReader br = new BufferedReader(new FileReader(megaFile));
+		br = new BufferedReader(new FileReader(megaFile));
 		
         message = "";
         
 		while(br.readLine() != null) {
-			message = message + br.readLine;
+			message = message + br.readLine();
 		}
 
 		br.close();
 
         // display message to be hashed
-        System.out.println("\nMessage to be hashed:");
+        System.out.println("\nMessage to be hashed: ");
         System.out.println(message);
 
         // time the built-in hash method
@@ -393,20 +402,21 @@ class CryptoTest {
         timeElapsed = endTime - startTime;
 
         // display results
-        System.out.println("Hash from built-in method:")
+        System.out.println("Hash from built-in method: ");
         System.out.println(hashBuiltIn);
         System.out.println("Time taken: " + timeElapsed + " ns");
 
         // time our implemented hash method
         startTime = System.nanoTime();
-        String hashImplemented = toHexString(SHA256.getSHA256(message));
+        hashImplemented = toHexString(SHA256.getSHA256(message));
         endTime = System.nanoTime();
         
         // find time taken by our implemented hash method
         timeElapsed = endTime - startTime;
 
         // display results     
-        System.out.println("Hash from our implementation:");
+        
+        System.out.println("Hash from our implementation: ");
         System.out.println(hashImplemented);
         System.out.println("Time taken: " + timeElapsed + " ns");
     }

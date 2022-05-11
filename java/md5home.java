@@ -1,8 +1,7 @@
+package hash;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-
-#define WORD_SIZE 32
 
 class MD5 {
     byte[4] negI = [0, 3, 2, 1];
@@ -158,7 +157,7 @@ class MD5 {
         }
     }
 
-    public int leftRotate(int target, byte n) { return (target << n) | (x >> (WORD_SIZE - n)); }
+    public int leftRotate(int target, byte n) { return (target << n) | (x >> (32 - n)); }
     public int F(int x, int y, int z) { return (x & y) | (~x & z); }
     public int G(int x, int y, int z) { return (x & z) | (y & ~z); }
     public int H(int x, int y, int z) { return x ^ y ^ z; }
@@ -166,7 +165,7 @@ class MD5 {
 
     public int generateT() {
         int[64] T;
-        for (int i = 0; i < 64; i++) { T[i] = int(floor(2^(WORD_SIZE) * abs(sin(i)))); }
+        for (int i = 0; i < 64; i++) { T[i] = int(floor(2^(32) * abs(sin(i)))); }
         return T;
     }
 }
