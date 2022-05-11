@@ -6,8 +6,7 @@ import java.security.MessageDigest;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import hash.MD5;
-import hash.SHA256;
+import hash.*;
 
 class CryptoTest {
 
