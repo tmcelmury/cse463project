@@ -1,18 +1,33 @@
 package hash;
-
-package hash;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.io.UnsupportedEncodingException;
 
 public class SHA256 {
     // method invoking built-in SHA-256 functionality
     // modified version of algorithm provided by bilal-hungund on GeeksforGeeks
     // https://www.geeksforgeeks.org/sha-256-hash-in-java/
-    public static byte[] getSHABuiltIn(String text) {
-        MessageDigest dig = MessageDigest.getInstance("SHA-256");
-
-        return dig.digest(text.getBytes(StandardCharsets.UTF_8));
+    public static String getSHABuiltIn(String text) {
+        try {
+            MessageDigest dig = MessageDigest.getInstance("SHA-256");
+            byte[] hash = dig.digest(text.getBytes("UTF-8"));
+            StringBuilder hexString = new StringBuilder();
+            
+            for (int i = 0; i < hash.length; i++) {
+                final String hex = Integer.toHexString(0xff & hash[i]);
+                if(hex.length() == 1) 
+                  hexString.append('0');
+                hexString.append(hex);
+            }
+            
+            return hexString.toString();
+        } catch(NoSuchAlgorithmException ex) {
+            throw new RuntimeException(ex);
+        } catch(UnsupportedEncodingException ey) {
+            throw new RuntimeException(ey);
+        }
     }
 
     // method to convert message hash to string of hex characters
@@ -29,40 +44,44 @@ public class SHA256 {
     }
 
     // our implementation of the SHA-256 algorithm
-    public static int getSHAImplemented(String message) {
+    public static long getSHAImplemented(String message) {
         // initialize hash values representing first 32 bits of
         // the fractional parts of the square roots of the first
         // 8 prime numbers (2, 3, 5, 7, 11, 13, 17, 19)
-        int[] hValues = {0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19};
+        long[] hValues = {0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19};
 
         // initialize rounded constants representing first 32 bits
         // of the fractional parts of the cube roots of the first
         // 64 prime numbers (2-311)
-        int[] kValues = {0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
-                         0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
-                         0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
-                         0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
-                         0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
-                         0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
-                         0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
-                         0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2};
+        long[] kValues = {0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+                          0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+                          0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+                          0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+                          0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+                          0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+                          0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+                          0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2};
 
         // pad the message to multiple of 512 bits
         long padded = Long.parseLong(pad(message));
 
         long numBlocks = padded * 8 / 512;
-        long messageChunks[];
+        long messageChunks[] = {};
         
-        int bitMaskChar = Integer.parseInt("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 2);
-        String bitMask = new Character((char) bitMaskChar).toString();
+        int bitMask = 0xffffffff;
+        long tempChunk = 0;
 
         // separate padded message into 512-bit chunks
         for(int i = 0; i < numBlocks; i++) {
-            messageChunks[i] = (padded >> (512 * (numBlocks - i - 1))) & ((long) 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff);
+            for(int j = 0; j < 64; j++) {
+                tempChunk = (tempChunk << 16) | ((padded << 16) & bitMask);
+            }
+            
+            messageChunks[i] = tempChunk;
         }
 
         // initialize schedule array
-        int scheduleArray[][];
+        long scheduleArray[][] = {};
 
         // initial values don't matter, so fill with 0s
         for(int i = 0; i < numBlocks; i++) {
@@ -79,77 +98,79 @@ public class SHA256 {
         }
 
         // initialize temp variables
-        int s0 = 0;
-        int s1 = 0;
-        int ch = 0;
-        int maj = 0;
-        int temp1 = 0;
-        int temp2 = 0
+        long s0 = 0;
+        long s1 = 0;
+        long ch = 0;
+        long maj = 0;
+        long temp1 = 0;
+        long temp2 = 0;
 
         // extend first 16 words of schedule array into remaining 48 words
-        for(int i = 16; i < 64; i++) {
-            s0 = rightRotate(scheduleArray[i-15], 7) ^
-                 rightRotate(scheduleArray[i-15], 18) ^
-                 (scheduleArray[i-15] >> 3);
-            
-            s1 = rightRotate(scheduleArray[i-2], 17) ^
-                 rightRotate(scheduleArray[i-2], 19) ^
-                 (scheduleArray[i] >> 10);
-            
-            scheduleArray[i] = scheduleArray[i-16] + s0 + scheduleArray[i-7] +s1;
+        for(int i = 0; i < numBlocks; i++) {
+            for(int j = 16; j < 64; j++) {
+                s0 = rightRotate(scheduleArray[i][j-15], 7) ^
+                     rightRotate(scheduleArray[i][j-15], 18) ^
+                     (scheduleArray[i][j-15] >> 3);
+                
+                s1 = rightRotate(scheduleArray[i][j-2], 17) ^
+                     rightRotate(scheduleArray[i][j-2], 19) ^
+                     (scheduleArray[i][j] >> 10);
+                
+                scheduleArray[i][j] = scheduleArray[i][j-16] + s0 + scheduleArray[i][j-7] +s1;
+            }
+
+            // initialize working variables to current hash value
+            long[] workingVars = {};
+    
+            for(int j = 0; j < 8; j++) {
+                workingVars[j] = hValues[j];
+            }
+    
+            // compression function
+            for(int j = 0; j < 64; j++) {
+                s1 = rightRotate(workingVars[4], 6) ^ rightRotate(workingVars[4], 25);
+                
+                ch = (workingVars[4] & workingVars[5]) ^
+                     (~(workingVars[4]) & workingVars[6]);
+                
+                temp1 = workingVars[7] + s1 + ch + kValues[j] + scheduleArray[i][j];
+    
+                s0 = rightRotate(workingVars[0], 2) ^
+                     rightRotate(workingVars[0], 13) ^
+                     rightRotate(workingVars[0], 22);
+    
+                maj = (workingVars[0] & workingVars[1]) ^
+                      (workingVars[0] & workingVars[2]) ^
+                      (workingVars[1] & workingVars[2]);
+    
+                temp2 = s0 + maj;
+            }
+    
+            workingVars[7] = workingVars[6];
+            workingVars[6] = workingVars[5];
+            workingVars[5] = workingVars[4];
+            workingVars[4] = workingVars[3] + temp1;
+            workingVars[3] = workingVars[2];
+            workingVars[2] = workingVars[1];
+            workingVars[1] = workingVars[0];
+            workingVars[0] = temp1 + temp2;
+    
+            // add compressed chunk to current hash value
+            hValues[0] = hValues[0] + workingVars[0];
+            hValues[1] = hValues[1] + workingVars[1];
+            hValues[2] = hValues[2] + workingVars[2];
+            hValues[3] = hValues[3] + workingVars[3];
+            hValues[4] = hValues[4] + workingVars[4];
+            hValues[5] = hValues[5] + workingVars[5];
+            hValues[6] = hValues[6] + workingVars[6];
+            hValues[7] = hValues[7] + workingVars[7];
         }
-
-        // initialize working variables to current hash value
-        long[] workingVars;
-
-        for(int i = 0; i < 8; i++) {
-            workingVars[i] = hValues[i];
-        }
-
-        // compression function
-        for(i = 0; i < 64; i++) {
-            s1 = rightRotate(workingVars[4], 6) ^ rightRotate(workingVars[4], 25);
             
-            ch = (workingVars[4] & workingVars[5]) ^
-                 (~(workingVars[4]) & workingVars[6]);
-            
-            temp1 = workingVars[7] + s1 + ch + kValues[i] + scheduleArray[i];
-
-            s0 = rightRotate(workingVars[0], 2) ^
-                 rightRotate(workingVars[0], 13) ^
-                 rightRotate(workingVars[0], 22);
-
-            maj = (workingVars[0] & workingVars[1]) ^
-                  (workingVars[0] & workingVars[2]) ^
-                  (workingVars[1] & workingVars[2]);
-
-            temp2 = s0 + maj;
-        }
-
-        workingVars[7] = workingVars[6];
-        workingVars[6] = workingVars[5];
-        workingVars[5] = workingVars[4];
-        workingVars[4] = workingVars[3] + temp1;
-        workingVars[3] = workingVars[2];
-        workingVars[2] = workingVars[1];
-        workingVars[1] = workingVars[0];
-        workingVars[0] = temp1 + temp2;
-
-        // add compressed chunk to current hash value
-        hValues[0] = hValues[0] + workingVars[0];
-        hValues[1] = hValues[1] + workingVars[1];
-        hValues[2] = hValues[2] + workingVars[2];
-        hValues[3] = hValues[3] + workingVars[3];
-        hValues[4] = hValues[4] + workingVars[4];
-        hValues[5] = hValues[5] + workingVars[5];
-        hValues[6] = hValues[6] + workingVars[6];
-        hValues[7] = hValues[7] + workingVars[7];
-
         // produce final hash
-        int finalHash = 0;
+        long finalHash = 0;
 
         for(int i = 0; i < 8; i++) {
-            finalHash = finalHash.appendBits(hValues[i]);
+            finalHash = appendBits(finalHash, hValues[i]);
         }
 
         return finalHash;
@@ -165,7 +186,7 @@ public class SHA256 {
         int lastIndex = msg.length;
 
         // break the 64 bit size into a byte array, using typecasting
-        long brokenSize[];
+        long brokenSize[] = {};
 
         if (remainder > 448) {
             // there's not enough space for the 64-bit size
@@ -239,7 +260,7 @@ public class SHA256 {
 
             // append size bytes to array
             for(int j = 0; j < 8; j++) {
-                msg[lastIndex] = (char) brokenSize[j]
+                msg[lastIndex] = (char) brokenSize[j];
                 lastIndex++;
             }
 
@@ -247,7 +268,7 @@ public class SHA256 {
         }
     }
 
-    public static int rightRotate(int num, int rotateCount) {
+    public static long rightRotate(long num, int rotateCount) {
         return (num >> rotateCount) | (num << 32 - rotateCount);
     }
 
