@@ -180,7 +180,7 @@ public class SHA256 {
         char[] msg = message.toCharArray();
         
         // find the remainder in bits after dividing total size by 512 bits
-        int remainder = (msg.length * 8) % 512;
+        int remainder = (msg.length * 8 * 2) % 512;
         
         // find the index just beyond the last, used for appending
         int lastIndex = msg.length;
