@@ -4,6 +4,9 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.nio.ByteBuffer;
+import java.lang.Math;
 
 public class MD5 {
     static byte[] negI = {0, 3, 2, 1};
@@ -35,100 +38,116 @@ public class MD5 {
             return hashtext;
         } catch(NoSuchAlgorithmException ex) {
             throw new RuntimeException(ex);
-        } catch(UnsupportedEncodingException ey) {
-            throw new RuntimeException(ey);
         }
     }
 
     public static int[] getMD5Implemented(String message) {
         int D[] = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476};
         
-        long padded = Long.parseLong(pad(message));
+        int[] padded = pad(message);
 
-        long numBlocks = padded * 8 / 512;
+        long numBlocks = padded.length / 64;
 
         for (int i = 0; i < numBlocks; i++) {
-            D = pass4(padded + (64 * i), pass3(padded + (64 * i), pass2(padded + (64 * i),
-                pass1(padded + (64 * i), D))));
+            D = pass4(Arrays.copyOfRange(padded, 64*i, 64*i+63), pass3(Arrays.copyOfRange(padded, 64*i, 64*i+63), pass2(Arrays.copyOfRange(padded, 64*i, 64*i+63),
+                pass1(Arrays.copyOfRange(padded, 64*i, 64*i+63), D))));
         }
         return D;
     }
 
-    public static String pad(String message) {
-        char[] msg = message.toCharArray();
+    public static int[] pad(String message) {
+        byte[] msg = message.getBytes();
         
-        int remainder = (msg.length * 8 * 2) % 512;    // // Find the remainder in bits after dividing total size by 512 bits
-        int lastIndex = msg.length;    // Find the index just beyond the last, used for appending
-        byte brokenSize[] = {};   // Break the 64 bit size into a byte array, using typecasting
+        int remainder = (msg.length * 8) % 512;    // // Find the remainder in bits after dividing total size by 512 bits
+        int words = (int) Math.ceil((msg.length * 8)/512) * 16;
+        long lastIndex = msg.length;    // Find the index just beyond the last, used for appending
+        byte brokenSize[] = longToBytes(lastIndex);   // Break the 64 bit size into a byte array, using typecasting
+
+        int[] padded = new int[words];
 
         if (remainder > 448) // There is not enough space for the 64 bit size
         {
-            msg[lastIndex] = 0x80;
+            msg[(int) lastIndex] = (byte) 0x80;
             lastIndex++;
 
-            int fill = (512 - remainder)/8;
+            int fill = (512 - remainder - 8)/8;
 
-            for (int h = 0; h < (fill - 1); h++)    // Fill with 0's up to next multiple of 512 bits
+            for (int h = 0; h < fill; h++)    // Fill with 0's up to next multiple of 512 bits
             {
-                msg[lastIndex] = 0x00;
+                msg[(int) lastIndex] = (byte) 0x00;
                 lastIndex++;
             }
 
             for (int i = 0; i < 56; i++)    // Append 56 bytes of 0's
             {
-                msg[lastIndex] = 0x00;
+                msg[(int) lastIndex] = (byte) 0x00;
                 lastIndex++;
             }
 
             for (int j = 0; j < 8; j++) // Append size bytes to array
             {
-                msg[lastIndex] = (char) brokenSize[j];
+                msg[(int) lastIndex] = brokenSize[j];
                 lastIndex++;
             }
-            return msg.toString();
+            
+            for (int k = 0; k < words; k++)
+            {
+                padded[k] = fromByteArray(Arrays.copyOfRange(msg, k*4, k*4+4));
+            }
+            return padded;
         }
         else if (remainder == 0)    // Exactly a multiple of 512 bits
         {
-            msg[lastIndex] = 0x80;  // Append 0b1000_0000
+            msg[(int) lastIndex] = (byte) 0x80;  // Append 0b1000_0000
             lastIndex++;
 
             for (int i = 0; i < 55; i++)    // Append 55 bytes of 0's
             {
-                msg[lastIndex] = 0x00;
+                msg[(int) lastIndex] = (byte) 0x00;
                 lastIndex++;
             }
 
             for (int j = 0; j < 8; j++) // Append size bytes to array
             {
-                msg[lastIndex] = (char) brokenSize[j];
+                msg[(int) lastIndex] = brokenSize[j];
                 lastIndex++;
             }
-            return msg.toString();
+            
+            for (int k = 0; k < words; k++)
+            {
+                padded[k] = fromByteArray(Arrays.copyOfRange(msg, k*4, k*4+4));
+            }
+            return padded;
         }
         else    // There is space for the 64 bit size
         {
             int fill = (remainder - 64)/8;  // Determine the number of bytes needed to fill before the 64 bit size
             
-            if (fill > 0 )  // If there is any space to fill, start with 0b1000_0000
+            if ( fill > 0 )  // If there is any space to fill, start with 0b1000_0000
             {
-                msg[lastIndex] = 0x80;
+                msg[(int) lastIndex] = (byte) 0x80;
                 lastIndex++;    // Increment the index for appending
                 fill--;     // Decrement the number of bytes needed to fill the necessary space
             }
 
-            while ( fill >= 0)  // Continue filling with 0's while there is space left to fill
+            while ( fill >= 0 )  // Continue filling with 0's while there is space left to fill
             {
-                msg[lastIndex] = 0x00;
+                msg[(int) lastIndex] = (byte) 0x00;
                 lastIndex++;
                 fill--;
             }
 
             for (int j = 0; j < 8; j++) // Append size bytes to array
             {
-                msg[lastIndex] = (char) brokenSize[j];
+                msg[(int) lastIndex] = brokenSize[j];
                 lastIndex++;
             }
-            return msg.toString();
+            
+            for (int k = 0; k < words; k++)
+            {
+                padded[k] = fromByteArray(Arrays.copyOfRange(msg, k*4, k*4+4));
+            }
+            return padded;
         }
     }
 
@@ -174,6 +193,17 @@ public class MD5 {
     public static int G(int x, int y, int z) { return (x & z) | (y & ~z); }
     public static int H(int x, int y, int z) { return x ^ y ^ z; }
     public static int I(int x, int y, int z) { return y ^ (x | ~z); }
+
+//  Courtesy of stack overflow contributors ////////////////////////////////////
+    public static int fromByteArray(byte[] bytes) {
+        return ByteBuffer.wrap(bytes).getInt();
+    }
+    public static byte[] longToBytes(long x) {
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        buffer.putLong(x);
+        return buffer.array();
+    }
+////////////////////////////////////////////////////////////////////////////////
 
     public static int[] generateT() {
         int T[] = {};
